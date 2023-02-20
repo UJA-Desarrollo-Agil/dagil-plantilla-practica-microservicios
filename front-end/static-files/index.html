@@ -32,17 +32,17 @@
     <h1>Aplicación Microservicios Plantilla</h1>
     <!-- Barra de navegación de la aplicación -->
     <nav>
-        <a href="javascript:Plantilla.home()" class="opcion-principal mostrar"
+        <a href="javascript:Plantilla.procesarHome()" class="opcion-principal"
             title="Llama a la ruta / del MS Plantilla">Home</a>
-        <a href="javascript:Plantilla.acercade()" class="opcion-principal mostrar"
-            title="Llama a la ruta /acercade del MS Plantilla">Home</a>
+        <a href="javascript:Plantilla.procesarAcercaDe()" class="opcion-principal"
+            title="Llama a la ruta /acercade del MS Plantilla">Acerca de</a>
     </nav>
 
     <!-- 
         Article en el que se va a mostrar la info cuando se pinche una opción del menú 
         Todos los apartados de este article se rellenarán con funciones en Javascript
     -->
-    <article id="seccion-principal" class="ocultar">
+    <article id="seccion-principal">
         <!-- Título del article -->
         <h2 id="seccion-principal-titulo"></h2>
         <!-- Contenido del article -->

@@ -29,9 +29,8 @@ Frontend.Article = {}
  * @returns El propio Article para concatenar llamadas
  */
 Frontend.Article.actualizar = function (titulo, contenido) {
-    this.borrar()
-        .aniadirTitulo(titulo)
-        .aniadirContenido(contenido)
-        .mostrar()
+    // Sustituyo el título y el contenido del articulo
+    document.getElementById( Frontend.ID_SECCION_PRINCIPAL_TITULO ).innerHTML = titulo
+    document.getElementById( Frontend.ID_SECCION_PRINCIPAL_CONTENIDO ).innerHTML = contenido
     return this;
 }
