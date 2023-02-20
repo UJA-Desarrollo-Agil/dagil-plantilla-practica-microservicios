@@ -14,10 +14,10 @@ const faunadb = require('faunadb'),
     q = faunadb.query;
 
 const client = new faunadb.Client({
-    secret: '¿¿¿ CLAVE SECRETA DE TU ACCESO A TU BBDD FAUNA ???',
+    secret: 'fnAE6dR1GVAA1qiaRxaSZtbA7yGo6OpT2cB5NQnb',
 });
 
-const COLLECTION = "¿¿¿ NOMBRE DE LA COLECCION ???"  
+const COLLECTION = "Personas"
 
 // CALLBACKS DEL MODELO
 
@@ -43,19 +43,19 @@ function CORS(res) {
  */
 const CB_MODEL_SELECTS = {
     /**
-     * Prueba de conexión a la BBDD: devuelve todos los documentos que haya en la BBDD.
+     * Prueba de conexión a la BBDD: devuelve todas las personas que haya en la BBDD.
      * @param {*} req Objeto con los parámetros que se han pasado en la llamada a esta URL 
      * @param {*} res Objeto Response con las respuesta que se va a dar a la petición recibida
      */
     test_db: async (req, res) => {
         try {
-            let documentos = await client.query(
+            let personas = await client.query(
                 q.Map(
                     q.Paginate(q.Documents(q.Collection(COLLECTION))),
                     q.Lambda("X", q.Get(q.Var("X")))
                 )
             )
-            res.status(200).json(documentos)
+            res.status(200).json(personas)
         } catch (error) {
             res.status(500).json({ error: error.description })
         }
@@ -78,9 +78,9 @@ const CB_OTHERS = {
      */
     home: async (req, res) => {
         try {
-            res.status(200).json({ mensaje: "Microservicio Plantilla: home" });
+            CORS(res).status(200).json({ mensaje: "Microservicio MS Plantilla: home" });
         } catch (error) {
-            res.status(500).json({ error: error.description })
+            CORS(res).status(500).json({ error: error.description })
         }
     },
 
@@ -91,14 +91,14 @@ const CB_OTHERS = {
      */
     acercaDe: async (req, res) => {
         try {
-            res.status(200).json({
-                mensaje: "Microservicio Plantilla: acerca de",
+            CORS(res).status(200).json({
+                mensaje: "Microservicio MS Plantilla: acerca de",
                 autor: "¿¿¿ AUTOR ???",
                 email: "¿¿¿ EMAIL ???",
                 fecha: "¿¿¿ FECHA ???"
             });
         } catch (error) {
-            res.status(500).json({ error: error.description })
+            CORS(res).status(500).json({ error: error.description })
         }
     },
 
