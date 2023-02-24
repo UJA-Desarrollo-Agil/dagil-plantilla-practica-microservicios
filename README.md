@@ -39,11 +39,11 @@ Las siguientes imágenes muestran la interfaz de la aplicación una vez puesta e
 
 *Pantalla de inicio de la aplicación cuando se está ejecutando con Jasmine para comprobación de TDD* &#8593;
 
-## Puesta en marcha de de la aplicación
+## Puesta en marcha de de la aplicación: ```npm install```
 
 Para facilitar la descarga del código como ejercicio de *Clasroom GitHub*, se han introducido las tres aplicaciones en un solo repositorio. En un proyecto real, tendríamos repositorios distintos para cada una de las aplicaciones.
 
-Para poder poner en marcha el proyecto, debemos clonar el repositorio y, posteriormente, ir entrando en cada uno de los tres directorios que existen (es decir: ```front-end```, ```ms-plantilla``` y ```api-gateway```)  y escribir la instrucción en cada uno de ellos:
+Para poder poner en marcha el proyecto, debemos clonar el repositorio y, posteriormente, ir abrir un terminal de línea de órdenes e ir entrando en cada uno de los tres directorios que existen (es decir: ```front-end```, ```ms-plantilla``` y ```api-gateway```) escribiendo la siguiente instrucción en cada uno de ellos:
 
 ```npm install```
 
@@ -54,9 +54,10 @@ npm test
 ```
 
 Si el resultado es que se han ejecutado los tests (aunque sea con error), es que el proceso de instalación ha sido correcto y podemos pasar a ejecutar la aplicación.
-## Ejecución de la aplicación
+## Ejecución de la aplicación: ```npm start```
 
-Para poder disfrutar de toda la funcionalidad de la aplicación, necesitamos abrir 4 consolas de línea de comandos. En cada una de ellas, tendremos que meternos en un directorio correspondiente a una aplicación y posteriormene ejecutar:
+Para poder disfrutar de toda la funcionalidad de la aplicación, necesitamos ejecutar **simultáneamente** las tres aplicaciones. Para ello, lo más adecuado es abrir tres consolas de línea de comandos distinas. En cada una de ellas, tendremos que meternos en un directorio correspondiente a una aplicación y posteriormene ejecutar:
+
 ```npm start```
 
 El resultado debería ser parecido a este:
@@ -79,44 +80,20 @@ fapi-gateway % npm start
 > node server.js
 
 [HPM] Proxy created: /  -> http://localhost:8002
-[HPM] Proxy rewrite rule created: "^/personas" ~> ""
-[HPM] Proxy created: /  -> http://localhost:8003
-[HPM] Proxy rewrite rule created: "^/proyectos" ~> ""
-Aplicación API-Gateway escuchando en 8001!
+[HPM] Proxy rewrite rule created: "^/plantilla" ~> ""
 ```
 
-*Consola de api-gateway:*
+*Consola de ms-plantilla:*
 ```
-fapi-gateway % npm start
+ms-plantilla % npm start
 
-> api-gateway@1.0.0 start
+> ms-plantilla@1.0.0 start
 > node server.js
 
-[HPM] Proxy created: /  -> http://localhost:8002
-[HPM] Proxy rewrite rule created: "^/personas" ~> ""
-[HPM] Proxy created: /  -> http://localhost:8003
-[HPM] Proxy rewrite rule created: "^/proyectos" ~> ""
-Aplicación API-Gateway escuchando en 8001!
-```
-*Consola de ms-personas:*
-```
-ms-personas % npm start
-
-> ms-personas@1.0.0 start
-> node server.js
-
-Microservicio PERSONAS ejecutándose en puerto 8002!
+Microservicio PLANTILLA ejecutándose en puerto 8002!
 ```
 
-*Consola de ms-proyectos:*
-```
-ms-proyectos % npm start
 
-> ms-proyectos@1.0.0 start
-> node server.js
-
-Microservicio PROYECTOS ejecutándose en puerto 8003!
-```
 
 ## Organización del árbol de directorios de cada app
 
