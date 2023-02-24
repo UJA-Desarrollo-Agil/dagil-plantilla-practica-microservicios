@@ -2,30 +2,31 @@
 
 Este código que se presenta aquí corresponde a la plantilla para realizar un desarrollo basado en microservicios para las prácticas de Desarrollo Ágil, para el curso 2022-2023.
 
+
 ## Arquitectura de la aplicación
 
-La aplicación en realidad funciona gracias a la colaboración de tres aplicaciones distintas (en realidad, tres servidores web implementados con [Express](https://expressjs.com/) para [Node.js](https://nodejs.org/en/)).
+La aplicación funciona gracias a la colaboración de **tres aplicaciones distintas** (en realidad, tres servidores web implementados con [Express ↗️](https://expressjs.com/) para [Node.js ↗️](https://nodejs.org/en/)).
 
 ![Esquema de comunicación entre las distintas aplicaciones ](./assets/img/esquema-comunicacion-apps.png) 
 
 *Esquema de comunicación entre las distintas aplicaciones.* &#8593;
 
 Como se puede observar, esta aplicación plantilla está formada por las siguientes aplicaciones web:
-* Aplicación *front-end*
-* Aplicación *api-gateway*
-* Aplicación *ms-plantilla* (un microservicio)
+* Aplicación *front-end*: servidor para la página web
+* Aplicación *api-gateway*: enrutador de peticiones a microservicios
+* Aplicación *ms-plantilla*: microservicio
 
 Se respetan siempre las siguientes reglas básicas:
 1. El usuario solo interactúa con la aplicación *front-end*
-2. La aplicación *front-end* solo interactía con la aplicación *api-gateway*
+2. La aplicación *front-end* solo interactúa con la aplicación *api-gateway*
 3. La aplicación *api-gateway* recibe peticiones de *front-end* y las deriva al microservicio correspondiente. Dicho microservicio resuelve la petición y envía el resultado a la aplicación *front-end* a través de *api-gateway*
 4. Los microservicios interactúan con una BBDD y con *api-gateway* y también entre ellos. 
 5. En el caso de haber varios microservicios, cada uno de ellos puede interactuar con una BBDD distinta. Además, los microservicios pueden interactuar directamente entre ellos.
    
-## Funcionamiento básico de la aplicación
-La funcionalidad es muy simple: hay dos botones que llaman, respectivamente, a la ruta raíz del microservicio (es decir, ```/plantilla/```) y a la ruta "Acerca de" (```/plantilla/acercade```) siempre usando como intermediario a la aplicación *api-gateway*.
+## Funcionamiento de la aplicación
+La funcionalidad implementada en la plantilla es muy simple: hay dos botones que llaman, respectivamente, a la ruta raíz del microservicio (es decir, ```/plantilla/```) y a la ruta "Acerca de" (```/plantilla/acercade```) siempre usando como intermediario a la aplicación *api-gateway*.
 
-Las siguientes imágenes muestran la interfaz de la aplicación una vez puesta en marcha
+Las siguientes imágenes muestran la interfaz de la aplicación una vez puesta en marcha:
 
 ![Pantalla de inicio de la aplicación al pulsar en el botón Home](./assets/img/front-end-index-home-sin-jasmine.png)
 
@@ -43,9 +44,11 @@ Las siguientes imágenes muestran la interfaz de la aplicación una vez puesta e
 
 Para facilitar la descarga del código como ejercicio de *Clasroom GitHub*, se han introducido las tres aplicaciones en un solo repositorio. En un proyecto real, tendríamos repositorios distintos para cada una de las aplicaciones.
 
-Para poder poner en marcha el proyecto, debemos clonar el repositorio y, posteriormente, ir abrir un terminal de línea de órdenes e ir entrando en cada uno de los tres directorios que existen (es decir: ```front-end```, ```ms-plantilla``` y ```api-gateway```) escribiendo la siguiente instrucción en cada uno de ellos:
+Para poder poner en marcha el proyecto, debemos clonar el repositorio y, posteriormente, abrir un terminal de línea de órdenes e ir entrando en cada uno de los tres directorios que existen (es decir: ```front-end```, ```ms-plantilla``` y ```api-gateway```) escribiendo la siguiente instrucción en cada uno de ellos:
 
-```npm install```
+```
+npm install
+```
 
 Para comprobar que la instalación ha funcionado correctamente, podemos ejecutar en cada uno de los directorios la siguiente instrucción:
 
@@ -58,11 +61,13 @@ Si el resultado es que se han ejecutado los tests (aunque sea con error), es que
 
 Para poder disfrutar de toda la funcionalidad de la aplicación, necesitamos ejecutar **simultáneamente** las tres aplicaciones. Para ello, lo más adecuado es abrir tres consolas de línea de comandos distinas. En cada una de ellas, tendremos que meternos en un directorio correspondiente a una aplicación y posteriormene ejecutar:
 
-```npm start```
+```
+npm start
+```
 
-El resultado debería ser parecido a este:
+El resultado debería ser muy similar a este:
 
-*Consola de front-end:*
+**Consola de front-end:**
 ```
 front-end % npm start
 
@@ -72,7 +77,7 @@ front-end % npm start
 Aplicación Front-End escuchando en puerto 8000!
 ```
 
-*Consola de api-gateway:*
+**Consola de api-gateway:**
 ```
 fapi-gateway % npm start
 
@@ -83,7 +88,7 @@ fapi-gateway % npm start
 [HPM] Proxy rewrite rule created: "^/plantilla" ~> ""
 ```
 
-*Consola de ms-plantilla:*
+**Consola de ms-plantilla:**
 ```
 ms-plantilla % npm start
 
@@ -93,7 +98,7 @@ ms-plantilla % npm start
 Microservicio PLANTILLA ejecutándose en puerto 8002!
 ```
 
-Una vez inicializadas las 3 aplicaciones, debemos poder abrir un navegador web y solicitar que nos muestre la URL: http://localhost:8000. Debería en ese momento cargarse la página web mostrando la siguiente imagen.
+Una vez inicializadas las 3 aplicaciones, debemos poder abrir un navegador web y solicitar que nos muestre la URL: http://localhost:8000 ↗️. Debería en ese momento cargarse la página web mostrando la siguiente imagen.
 
 ![Pantalla de inicio de la aplicación en la primera ejecución](./assets/img/front-end-index-con-jasmine.png)
 
@@ -116,7 +121,7 @@ Para ejecutar la aplicación **SIN COMPROBACIÓN EN EL NAVEGADOR** de TDD, tendr
     <script src="js/ms-plantilla-spec.js"></script>
 ```
 
-Hay que tener en cuenta que es un fichero HTML por lo que habrá que comentarlas usando: ```<!--``` y ```-->```.
+Hay que tener en cuenta que NO ES un fichero JavaScript, sino que es un fichero HTML; por tanto, para comentar esas líneas hay que usar: ```<!--``` y ```-->```.
 ## Organización del árbol de directorios de cada app
 
 Las tres apps que forman el sistema completo tienen su código por separado y no comparten nada de dicho código.
@@ -129,17 +134,18 @@ No obstante, *ms-plantilla* y *front-end* tienen un conjunto de directorios y de
 
 
 Describimos brevemente los ficheros y directorios que se encuentran en estas apps:
-* ```server.js```: fichero en el que se declara el objeto ```app```, el cual hace las veces de servidor web; es decir, recibe llamadas a través del protocolo *http* y devuelve un resultado que puede ser en JSON o como fichero HTML (este formato solo lo devuelve la app *front-end*). Las tres aplicaciones desarrolladas utilizan la biblioteca [Express](https://expressjs.com/) para [Node.js](https://nodejs.org/en/).
+* ```server.js```: fichero en el que se declara el objeto ```app```, el cual hace las veces de servidor web; es decir, recibe llamadas a través del protocolo *http* y devuelve un resultado que puede ser en JSON o como fichero HTML (este formato solo lo devuelve la app *front-end*). Las tres aplicaciones desarrolladas utilizan la biblioteca [Express ↗️](https://expressjs.com/) para [Node.js ↗️](https://nodejs.org/en/).
 * ```routes.js```: fichero en el que se declaran las rutas que se van a atender dentro de la llamada *http* que se está realizando. En la aplicación *api-gateway* este fichero cambia su nombre a ```proxy-routes.js```.
 * ```callbacks.js```: fichero en el que se encuentran las funciones con las que se va a procesar la llamada a cada una de las rutas definidas en *routes.js*. El fichero ```calbacks.js``` **no existe** en la aplicación *api-gateway* dado que no es necesario que esta aplicación genere ni procese resultados; solamente reenvía lo que recibe hacia y desde el *fron-end* hacia los microservicios.
-* ```spec```: directorio en el que se encuentran las pruebas a realizar con el entorno [Jasmine](https://jasmine.github.io/), para realizar TDD con JavaScript.
+* ```spec```: directorio en el que se encuentran las pruebas a realizar con el entorno [Jasmine ↗️](https://jasmine.github.io/), para realizar TDD con JavaScript.
 * ```package.json```: fichero con la configuración de cada app, necesario para que *npm* pueda ejecutar el proyecto.
 
 
 Pasemos a ver alguno de estos ficheros con algo más de detalle.
 
 ### Fichero ```server.js```
-Este fichero es el que se ejecuta al lanzar la aplicación y contiene apenas una líneas para configurar el servidor ([Express](https://expressjs.com/)) y dejarlo escuchando en el puerto seleccionado:
+
+El fichero ```server.js``` es el que permite ejecutar el servidor web en cada aplicación. En realidad, apenas se compone de unas líneas para configurar el servidor ([Express ↗️](https://expressjs.com/)) y dejarlo escuchando en el puerto seleccionado:
 
 ```
 /**
@@ -176,6 +182,7 @@ module.exports = app
 Hay que tener en cuenta que en la aplicación *api-gateway* este fichero NO EXISTE, y en su lugar se define un objeto *proxy* que redirige las llamadas a los distintos microservicios. 
 
 ### Fichero ```routes.js```
+
 Como se observa en el fichero ```server.js```, el servidor hace uso del módulo *routes* el cual define las rutas (paths, URLs) a los que nuestro servidor va a responder.
 
 En el caso de la aplicación *api-gateway* este fichero ```routes.js``` no existe, y en su lugar se utiliza un fichero ```proxy-routes.js``` en el que se indican las reglas que debe seguir el *proxy* para redirigir las llamadas que le llegan.
@@ -236,10 +243,11 @@ module.exports = router;
 ```
 *Ejemplo del fichero ```routes.js``` del microservicio Plantilla*
 
-Como se observa en el ejemplo, este fichero define todas las rutas que se van a poder procesar y delega en un método del objeto *callbacks* el conjunto de acciones a realizar. El objeto *callbacks* es por tanto fundamental para que se ejecuta realmente la funcionalidad que el usuario espera.
+Como se observa en el ejemplo, este fichero ```routes.js``` define todas las rutas que se van a poder procesar y delega en un método del objeto *callbacks* el conjunto de acciones a realizar. El objeto *callbacks* es por tanto fundamental para que se ejecuta realmente la funcionalidad que el usuario espera.
 
 ### Fichero ```callbacks.js```
-Finalmente, este fichero define un objeto importantísimo dado que contiene las constantes y métodos que se van a usar para resolver las llamadas que el usuario está realizando a través de las conexiones que realiza mediante su navegador de páginas web.
+
+Finalmente, el fichero ```callbacks.js``` define un objeto importantísimo dado que contiene las constantes y métodos que se van a usar para resolver las llamadas que el usuario está realizando a través de las conexiones que realiza mediante su navegador de páginas web.
 
 Estos métodos son precisamente los encargados de conectar con la base de datos, por lo que son los que permiten recuperar y almacenar datos en la misma.
 
@@ -406,7 +414,7 @@ router.get("/", async (req, res) => {
 
 ```
 
-Ambas palabras reservadas permiten trabajar mucho más cómodamente con "promesas" ([promise]()https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise). Una promesa se define como:
+Ambas palabras reservadas permiten trabajar mucho más cómodamente con "promesas" ([promise ↗️](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)). Una promesa se define como:
 > Una promesa es un objeto que representa la *eventual* resolución (con éxito o no) de una operación asíncrona, así como el valor devuelto por dicha operación.
 
 En esencia, una promesa es una operación que se lanza y que NO detiene la ejecución del programa, pero que se queda "escuchando" hasta que recibe una respuesta. Normalmente se utilizan para solicitar datos a servicios remotos, de modo que la promesa lanza la llamada y, cuando llega el resultado, lo procesa. Mientras tanto, la aplicación sigue recibiendo peticiones y contestando a las mismas.
@@ -416,12 +424,14 @@ La utilización de *async* y *await* facilita enormemente la programación con p
 *Lo más reseñable* del uso de estas dos palabras reservadas es que: **el operador _await_ solo puede usarse dentro de funciones o métodos que hayan sido declarados como _async_**.
 
 Para profundizar más en la programación con promesas pueden usarse los siguientes enlaces:
-* [JavaScript Asíncrono](https://developer.mozilla.org/es/docs/Learn/JavaScript/Asynchronous)
-* [async and await](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous/Promises#async_and_await)
+* [JavaScript Asíncrono](https://developer.mozilla.org/es/docs/Learn/JavaScript/Asynchronous) ↗️
+* [async and await](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous/Promises#async_and_await) ↗️
 
 ## Aplicación de ejemplo de la que obtener código
 Finalmente, para la implementación de la funcionalidad requerida en la práctica, se puede hacer uso del código disponible en el siguiente repositorio: 
 
-Dicho código muestra una aplicación similar, pero con mucha más funcionalidad que esta plantilla: acceso a base de datos remota, listado de documentos recuperados de la BBDD, peticiones entre distintos microservicios, etc.
+https://github.com/UJA-Desarrollo-Agil/descripcion-proyecto-microservicios-personas-proyectos ↗️
+
+El código en ese repositorio muestra una aplicación similar, pero con mucha más funcionalidad que esta plantilla: acceso a base de datos remota, listado de documentos recuperados de la BBDD, peticiones entre distintos microservicios, etc.
 
 Además, incluye documentación sobre dicho código y un vídeo descriptivo de cómo se ha realizado y cómo funciona la aplicación de ejemplo.
