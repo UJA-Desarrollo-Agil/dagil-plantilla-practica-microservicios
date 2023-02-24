@@ -10,6 +10,13 @@
 /// Creo el espacio de nombres
 let Plantilla = {};
 
+// Plantilla de datosDescargados vacíos
+Plantilla.datosDescargadosNulos = {
+    mensaje: "Datos Descargados No válidos",
+    autor: "",
+    email: "",
+    fecha: ""
+}
 
 
 /**
@@ -44,14 +51,36 @@ Plantilla.descargarRuta = async function (ruta, callBackFn) {
  * Función principal para mostrar los datos enviados por la ruta "home" de MS Plantilla
  */
 Plantilla.mostrarHome = function (datosDescargados) {
-    Frontend.Article.actualizar( "Plantilla Home", datosDescargados.mensaje)
+    // Si no se ha proporcionado valor para datosDescargados
+    datosDescargados = datosDescargados || this.datosDescargadosNulos
+
+    // Si datos descargados NO es un objeto 
+    if (typeof datosDescargados !== "object") datosDescargados = this.datosDescargadosNulos
+
+    // Si datos descargados NO contiene el campo mensaje
+    if (typeof datosDescargados.mensaje === "undefined") datosDescargados = this.datosDescargadosNulos
+
+    Frontend.Article.actualizar("Plantilla Home", datosDescargados.mensaje)
 }
 
 /**
  * Función principal para mostrar los datos enviados por la ruta "acerca de" de MS Plantilla
  */
 Plantilla.mostrarAcercaDe = function (datosDescargados) {
-    const mensajeAMostrar= `<div>
+    // Si no se ha proporcionado valor para datosDescargados
+    datosDescargados = datosDescargados || this.datosDescargadosNulos
+
+    // Si datos descargados NO es un objeto 
+    if (typeof datosDescargados !== "object") datosDescargados = this.datosDescargadosNulos
+
+    // Si datos descargados NO contiene los campos mensaje, autor, o email
+    if (typeof datosDescargados.mensaje === "undefined" ||
+        typeof datosDescargados.autor === "undefined" ||
+        typeof datosDescargados.email === "undefined" ||
+        typeof datosDescargados.fecha === "undefined"
+    ) datosDescargados = this.datosDescargadosNulos
+
+    const mensajeAMostrar = `<div>
     <p>${datosDescargados.mensaje}</p>
     <ul>
         <li><b>Autor/a</b>: ${datosDescargados.autor}</li>
@@ -60,7 +89,7 @@ Plantilla.mostrarAcercaDe = function (datosDescargados) {
     </ul>
     </div>
     `;
-    Frontend.Article.actualizar( "Plantilla Acerca de", mensajeAMostrar)
+    Frontend.Article.actualizar("Plantilla Acerca de", mensajeAMostrar)
 }
 
 
@@ -68,14 +97,14 @@ Plantilla.mostrarAcercaDe = function (datosDescargados) {
  * Función principal para responder al evento de elegir la opción "Home"
  */
 Plantilla.procesarHome = function () {
-    this.descargarRuta("/plantilla/", this.mostrarHome );
+    this.descargarRuta("/plantilla/", this.mostrarHome);
 }
 
 /**
  * Función principal para responder al evento de elegir la opción "Acerca de"
  */
 Plantilla.procesarAcercaDe = function () {
-    this.descargarRuta("/plantilla/acercade", this.mostrarAcercaDe );
+    this.descargarRuta("/plantilla/acercade", this.mostrarAcercaDe);
 }
 
 
