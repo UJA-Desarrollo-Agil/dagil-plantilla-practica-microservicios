@@ -23,12 +23,21 @@ Se respetan siempre las siguientes reglas básicas:
 5. En el caso de haber varios microservicios, cada uno de ellos puede interactuar con una BBDD distinta. Además, los microservicios pueden interactuar directamente entre ellos.
    
 ## Funcionamiento básico de la aplicación
-La funcionalidad es muy simple: hay un conjunto de personas asignadas a un conjunto de proyectos (de software). Y la aplicación permite listar tanto las personas que hay como los proyectos, así como modificar los datos de las personas.
+La funcionalidad es muy simple: hay dos botones que llaman, respectivamente, a la ruta raíz del microservicio (es decir, ```/plantilla/```) y a la ruta "Acerca de" (```/plantilla/acercade```) siempre usando como intermediario a la aplicación *api-gateway*.
 
-![Pantalla de inicio de la aplicación](./assets/img/front-end-index.png)
+Las siguientes imágenes muestran la interfaz de la aplicación una vez puesta en marcha
 
-*Pantalla de inicio de la aplicación* &#8593;
+![Pantalla de inicio de la aplicación al pulsar en el botón Home](./assets/img/front-end-index-home-sin-jasmine.png)
 
+*Pantalla de inicio de la aplicación al pulsar en el botón **Home*** &#8593;
+
+![Pantalla de inicio de la aplicación al pulsar en el botón Acerca De](./assets/img/front-index-acerca-de-sin-jasmine.png)
+
+*Pantalla de inicio de la aplicación al pulsar en el botón **Acerca de*** &#8593;
+
+![Pantalla de inicio de la aplicación cuando se está ejecutando con Jasmine para comprobación de TDD](./assets/img/front-end-index-con-jasmine.png)
+
+*Pantalla de inicio de la aplicación cuando se está ejecutando con Jasmine para comprobación de TDD* &#8593;
 
 
 
