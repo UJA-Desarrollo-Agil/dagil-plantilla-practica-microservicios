@@ -1,7 +1,27 @@
-# Descripción de la aplicación PERSONAS-PROYECTOS basada en MICROSERVICIOS
+# Descripción de la aplicación Plantilla Práctica Microservicios    
 
-Esta aplicación se hace para explicar cómo vamos a implementar los microservicios en las prácticas de Desarrollo Ágil, para el curso 2022-2023.
+Este código que se presenta aquí corresponde a la plantilla para realizar un desarrollo basado en microservicios para las prácticas de Desarrollo Ágil, para el curso 2022-2023.
 
+## Arquitectura de la aplicación
+
+La aplicación en realidad funciona gracias a la colaboración de tres aplicaciones distintas (en realidad, tres servidores web implementados con *express* en *Node.js*).
+
+![Esquema de comunicación entre las distintas aplicaciones ](./assets/img/esquema-comunicacion-apps.png) 
+
+*Esquema de comunicación entre las distintas aplicaciones.* &#8593;
+
+Como se puede observar, esta aplicación plantilla está formada por las siguientes aplicaciones web:
+* Aplicación *front-end*
+* Aplicación *api-gateway*
+* Aplicación *ms-plantilla* (un microservicio)
+
+Se respetan siempre las siguientes reglas básicas:
+1. El usuario solo interactúa con la aplicación *front-end*
+2. La aplicación *front-end* solo interactía con la aplicación *api-gateway*
+3. La aplicación *api-gateway* recibe peticiones de *front-end* y las deriva al microservicio correspondiente. Dicho microservicio resuelve la petición y envía el resultado a la aplicación *front-end* a través de *api-gateway*
+4. Los microservicios interactúan con una BBDD y con *api-gateway* y también entre ellos. 
+5. En el caso de haber varios microservicios, cada uno de ellos puede interactuar con una BBDD distinta. Además, los microservicios pueden interactuar directamente entre ellos.
+   
 ## Funcionamiento básico de la aplicación
 La funcionalidad es muy simple: hay un conjunto de personas asignadas a un conjunto de proyectos (de software). Y la aplicación permite listar tanto las personas que hay como los proyectos, así como modificar los datos de las personas.
 
@@ -9,21 +29,8 @@ La funcionalidad es muy simple: hay un conjunto de personas asignadas a un conju
 
 *Pantalla de inicio de la aplicación* &#8593;
 
-Esta aplicación de muestra está formada, a su vez, por 4 aplicaciones (=servidores) independientes:
-* Aplicación *front-end*
-* Aplicación *api-gateway*
-* Aplicación *ms-personas* (un microservicio)
-* Aplicación *ms-proyectos* (otro microservicio)
 
-Se respetan siempre las siguientes reglas básicas:
-1. El usuario solo interactúa con la aplicación *front-end*
-2. La aplicación *front-end* solo interactía con la aplicación *api-gateway*
-3. La aplicación *api-gateway* recibe peticiones de *front-end* y las deriva al microservicio correspondiente. El servicio resuelve la petición y envía el resultado a la aplicación *front-end* a través de *api-gateway*
-4. Los microservicios interactúan con una BBDD (posiblemente distinta para cada microservicio), con *api-gateway* y también entre ellos.
-   
-![Esquema de comunicación entre las distintas aplicaciones ](./assets/img/esquema-comunicacion-apps.png) 
 
-*Esquema de comunicación entre las distintas aplicaciones.* &#8593;
 
 ## Ejecución de la aplicación
 
