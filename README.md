@@ -39,11 +39,22 @@ Las siguientes imágenes muestran la interfaz de la aplicación una vez puesta e
 
 *Pantalla de inicio de la aplicación cuando se está ejecutando con Jasmine para comprobación de TDD* &#8593;
 
+## Puesta en marcha de de la aplicación
 
+Para facilitar la descarga del código como ejercicio de *Clasroom GitHub*, se han introducido las tres aplicaciones en un solo repositorio. En un proyecto real, tendríamos repositorios distintos para cada una de las aplicaciones.
 
+Para poder poner en marcha el proyecto, debemos clonar el repositorio y, posteriormente, ir entrando en cada uno de los tres directorios que existen (es decir: ```front-end```, ```ms-plantilla``` y ```api-gateway```)  y escribir la instrucción en cada uno de ellos:
+
+```npm install```
+
+Para comprobar que la instalación ha funcionado correctamente, podemos ejecutar en cada uno de los directorios la siguiente instrucción:
+
+```
+npm test
+```
+
+Si el resultado es que se han ejecutado los tests (aunque sea con error), es que el proceso de instalación ha sido correcto y podemos pasar a ejecutar la aplicación.
 ## Ejecución de la aplicación
-
-Más que hablar de ejecución de la aplicación deberíamos hablar de ejecución de **las aplicaciones**, dado que son 4.
 
 Para poder disfrutar de toda la funcionalidad de la aplicación, necesitamos abrir 4 consolas de línea de comandos. En cada una de ellas, tendremos que meternos en un directorio correspondiente a una aplicación y posteriormene ejecutar:
 ```npm start```
