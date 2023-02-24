@@ -5,22 +5,12 @@
     <title>Aplicación Microservicios Plantilla</title>
 
     <!-- Cargamos biblioteca Jasmine -->
-    
+
     <link rel="stylesheet" href="lib/jasmine-4.5.0/jasmine.css">
     <script src="lib/jasmine-4.5.0/jasmine.js"></script>
     <script src="lib/jasmine-4.5.0/jasmine-html.js"></script>
     <script src="lib/jasmine-4.5.0/boot0.js"></script>
     <script src="lib/jasmine-4.5.0/boot1.js"></script>
-    
-    <!-- Cargamos ficheros JS propios del proyecto -->
-    <script src="js/front-end.js"></script>
-    <script src="js/ms-plantilla.js"></script>
-
-
-    <!-- Cargamos ficheros spec con los tests -->
-    
-    <script src="js/ms-plantilla-spec.js"></script>
-    
 
     <!-- Cargamos nuestros CSS -->
     <link rel="stylesheet" href="css/front-end.css">
@@ -49,6 +39,24 @@
         <div id="seccion-principal-contenido">
         </div>
     </article>
+
+
+    <!-- 
+        ...............  ZONA DE CARGA DE FICHEROS JS .........................
+    
+        Debe ponerse al final del documento para que estén creados los elementos del DOM.
+        
+    -->
+
+    <!-- Cargamos ficheros JS propios del proyecto -->
+    <script src="js/front-end.js"></script>
+    <script src="js/ms-plantilla.js"></script>
+
+
+    <!-- Cargamos ficheros spec con los tests -->
+    <script src="js/front-end-spec.js"></script>
+    <script src="js/ms-plantilla-spec.js"></script>
+
 </body>
 
 </html>

@@ -7,7 +7,7 @@
 
 // SPECS para Jasmine
 describe("MAIN", function () {
-    it("main debería devolver true",
+    it("main debería devolver pataa true",
         function () {
             expect(true).toBeTrue();
         });
