@@ -4,7 +4,7 @@ Este código que se presenta aquí corresponde a la plantilla para realizar un d
 
 ## Arquitectura de la aplicación
 
-La aplicación en realidad funciona gracias a la colaboración de tres aplicaciones distintas (en realidad, tres servidores web implementados con *express* en *Node.js*).
+La aplicación en realidad funciona gracias a la colaboración de tres aplicaciones distintas (en realidad, tres servidores web implementados con [Express](https://expressjs.com/) para [Node.js](https://nodejs.org/en/)).
 
 ![Esquema de comunicación entre las distintas aplicaciones ](./assets/img/esquema-comunicacion-apps.png) 
 
@@ -93,27 +93,48 @@ ms-plantilla % npm start
 Microservicio PLANTILLA ejecutándose en puerto 8002!
 ```
 
+Una vez inicializadas las 3 aplicaciones, debemos poder abrir un navegador web y solicitar que nos muestre la URL: http://localhost:8000. Debería en ese momento cargarse la página web mostrando la siguiente imagen.
 
+![Pantalla de inicio de la aplicación en la primera ejecución](./assets/img/front-end-index-con-jasmine.png)
 
+*Pantalla de inicio de la aplicación en la primera ejecución* &#8593;
+
+Para ejecutar la aplicación **SIN COMPROBACIÓN EN EL NAVEGADOR** de TDD, tendríamos que comentar (o eliminar) las siguientes líneas del fichero **index.html**:
+
+**En la parte superior del fichero *index.html***:
+```
+    <link rel="stylesheet" href="lib/jasmine-4.5.0/jasmine.css">
+    <script src="lib/jasmine-4.5.0/jasmine.js"></script>
+    <script src="lib/jasmine-4.5.0/jasmine-html.js"></script>
+    <script src="lib/jasmine-4.5.0/boot0.js"></script>
+    <script src="lib/jasmine-4.5.0/boot1.js"></script>
+```
+
+**En la parte inferior del fichero *index.html***:
+```
+    <script src="js/front-end-spec.js"></script>
+    <script src="js/ms-plantilla-spec.js"></script>
+```
+
+Hay que tener en cuenta que es un fichero HTML por lo que habrá que comentarlas usando: ```<!--``` y ```-->```.
 ## Organización del árbol de directorios de cada app
 
-Las cuatro apps que forman el sistema completo tienen su código por separado y no comparten nada de dicho código.
+Las tres apps que forman el sistema completo tienen su código por separado y no comparten nada de dicho código.
 
-No obstante, todas tres de ellas (*ms-proyectos*, *ms-personas* y *front-end*) tienen un conjunto de directorios y de ficheros con nombres idénticos (aunque con contenidos distintos). Solo la app *api-gateway* es un poco distinta, por el hecho de que se limita a redireccionar las llamadas que le llegan enviándolas al microservicio correspondiente.
+No obstante, *ms-plantilla* y *front-end* tienen un conjunto de directorios y de ficheros con nombres idénticos (aunque con contenidos distintos). Solo la app *api-gateway* es un poco distinta, por el hecho de que se limita a redireccionar las llamadas que le llegan enviándolas al microservicio correspondiente.
+
+![Estructura de directorios y ficheros de las aplicaciones](./assets/img/estructura-directorios-ficheros.png)
+
+*Estructura de directorios y ficheros de las aplicaciones* &#8593;
+
 
 Describimos brevemente los ficheros y directorios que se encuentran en estas apps:
-* ```server.js```: fichero en el que se declara el objeto ```app```, el cual hace las veces de servidor web; es decir, recibe llamadas a través del protocolo *http* y devuelve un resultado que puede ser en JSON o como fichero HTML (este formato solo lo devuelve la app *front-end*). Las cuatro aplicaciones desarrolladas utilizan la biblioteca [Express](https://expressjs.com/) para [Node.js](https://nodejs.org/en/).
+* ```server.js```: fichero en el que se declara el objeto ```app```, el cual hace las veces de servidor web; es decir, recibe llamadas a través del protocolo *http* y devuelve un resultado que puede ser en JSON o como fichero HTML (este formato solo lo devuelve la app *front-end*). Las tres aplicaciones desarrolladas utilizan la biblioteca [Express](https://expressjs.com/) para [Node.js](https://nodejs.org/en/).
 * ```routes.js```: fichero en el que se declaran las rutas que se van a atender dentro de la llamada *http* que se está realizando. En la aplicación *api-gateway* este fichero cambia su nombre a ```proxy-routes.js```.
 * ```callbacks.js```: fichero en el que se encuentran las funciones con las que se va a procesar la llamada a cada una de las rutas definidas en *routes.js*. El fichero ```calbacks.js``` **no existe** en la aplicación *api-gateway* dado que no es necesario que esta aplicación genere ni procese resultados; solamente reenvía lo que recibe hacia y desde el *fron-end* hacia los microservicios.
 * ```spec```: directorio en el que se encuentran las pruebas a realizar con el entorno [Jasmine](https://jasmine.github.io/), para realizar TDD con JavaScript.
-* ```package.json```: fichero con la configuración de cada app, necesario para que *nodejs* pueda ejecutar el proyecto.
-* ```README.md```: fichero con la descripción de cada proyecto, el cual a su vez sirve como documentación del mismo.
+* ```package.json```: fichero con la configuración de cada app, necesario para que *npm* pueda ejecutar el proyecto.
 
-
-
- ![Árbol de directorios yfichero de una de las aplicaciones](./assets/img/estructura%20directorios%20y%20ficheros.png) 
- 
- *Árbol de directorios y ficheros de una de las aplicaciones* &#8593;
 
 Pasemos a ver alguno de estos ficheros con algo más de detalle.
 
@@ -123,25 +144,34 @@ Este fichero es el que se ejecuta al lanzar la aplicación y contiene apenas una
 ```
 /**
  * @file server.js
- * @description Define el servidor que aceptará las peticiones para el MS Proyectos
+ * @description Define el servidor que aceptará las peticiones para esta aplicación.
  * @author Víctor M. Rivas <vrivas@ujaen.es>
  * @date 03-feb-2023
  */
-const express = require("express");
-const routes = require("./routes");
-const app = express();
-const port = 8003;
+const express = require("express")
+const app = express()
+
+// Necesario para poder obtener los datos en las llamadas POST
+const bodyParser = require("body-parser")
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// Necesario para gestionar el conjunto de callbacks para las distintas funciones REST
+const routes = require("./routes")
 app.use("/", routes);
 
 
+
+
+const port = 8002;
 app.listen(port, () => {
-    console.log(`Microservicio PROYECTOS ejecutándose en puerto ${port}!`);
+    console.log(`Microservicio PLANTILLA ejecutándose en puerto ${port}!`);
 });
 
 
 module.exports = app
 ```
-*Ejemplo de fichero ```server.js``` del microservicio Proyectos*
+*Ejemplo de fichero ```server.js``` del microservicio Plantilla*
 
 Hay que tener en cuenta que en la aplicación *api-gateway* este fichero NO EXISTE, y en su lugar se define un objeto *proxy* que redirige las llamadas a los distintos microservicios. 
 
@@ -153,13 +183,15 @@ En el caso de la aplicación *api-gateway* este fichero ```routes.js``` no exist
 ```
 /**
  * @file routes.js
- * @description Define las rutas ante las que va a responder el MS Proyectos
+ * @description Define las rutas ante las que va a responder al MS Plantilla
  * @author Víctor M. Rivas <vrivas@ujaen.es>
  * @date 03-feb-2023
  */
+
 const express = require("express");
 const router = express.Router();
 const { callbacks } = require("./callbacks");
+
 
 
 /**
@@ -197,33 +229,12 @@ router.get("/test_db", async (req, res) => {
     }
 });
 
-/**
- * Devuelve todas las personas que hay en la BBDD
- */
-router.get("/getTodos", async (req, res) => {
-    try {
-        await callbacks.getTodos(req, res)
-    } catch (error) {
-        console.log(error);
-    }
-});
-
-
-// Devuelve todos los proyectos que hay en la BBDD añadiendo las personas que participan
-router.get("/getTodosConPersonas", async (req, res) => {
-    try {
-        await callbacks.getTodosConPersonas(req, res)
-    } catch (error) {
-        console.log(error);
-    }
-});
-
-
 
 // Exporto el módulo para poder usarlo en server
 module.exports = router;
+
 ```
-*Ejemplo del fichero ```routes.js``` del microservicio Proyectos*
+*Ejemplo del fichero ```routes.js``` del microservicio Plantilla*
 
 Como se observa en el ejemplo, este fichero define todas las rutas que se van a poder procesar y delega en un método del objeto *callbacks* el conjunto de acciones a realizar. El objeto *callbacks* es por tanto fundamental para que se ejecuta realmente la funcionalidad que el usuario espera.
 
@@ -233,29 +244,28 @@ Finalmente, este fichero define un objeto importantísimo dado que contiene las 
 Estos métodos son precisamente los encargados de conectar con la base de datos, por lo que son los que permiten recuperar y almacenar datos en la misma.
 
 ```
-/**
- * @file callbacks.js 
- * @description  Callbacks para MS Proyectos.
+//**
+ * @file callbacks.js
+ * @description Callbacks para el MS Plantilla.
  * Los callbacks son las funciones que se llaman cada vez que se recibe una petición a través de la API.
  * Las peticiones se reciben en las rutas definidas en routes.js, pero se procesan aquí.
  * @author Víctor M. Rivas <vrivas@ujaen.es>
  * @date 03-feb-2023
  */
 
-/// Necesario para solicitar datos a otro ms
-const fetch = require("node-fetch"); 
 
-/// Dirección del ms personas, necesario para ms proyectos
-const URL_MS_PERSONAS = "http://localhost:8002";
 
-/// Necesario para conectar a la BBDD
+// Necesario para conectar a la BBDD faunadb
 const faunadb = require('faunadb'),
     q = faunadb.query;
 
-const client_proyectos = new faunadb.Client({
-    secret: '**********',
+const client = new faunadb.Client({
+    secret: '¿¿¿ CLAVE SECRETA EN FAUNA PARA ESTA BBDD???',
 });
 
+const COLLECTION = "¿¿¿ COLECCION ???"
+
+// CALLBACKS DEL MODELO
 
 /**
  * Función que permite servir llamadas sin importar el origen:
@@ -279,79 +289,29 @@ function CORS(res) {
  */
 const CB_MODEL_SELECTS = {
     /**
-     * Prueba de conexión a la BBDD: devuelve todas los proyectos que haya en la BBDD.
+     * Prueba de conexión a la BBDD: devuelve todas las personas que haya en la BBDD.
      * @param {*} req Objeto con los parámetros que se han pasado en la llamada a esta URL 
      * @param {*} res Objeto Response con las respuesta que se va a dar a la petición recibida
      */
     test_db: async (req, res) => {
         try {
-            let proyectos = await client_proyectos.query(
+            let personas = await client.query(
                 q.Map(
-                    q.Paginate(q.Documents(q.Collection("Proyectos"))),
+                    q.Paginate(q.Documents(q.Collection(COLLECTION))),
                     q.Lambda("X", q.Get(q.Var("X")))
                 )
             )
-            res.status(200).json(proyectos)
+            res.status(200).json(personas)
         } catch (error) {
             res.status(500).json({ error: error.description })
         }
     },
-    /**
-     * Método para obtener todos los proyectos de la BBDD.
-     * @param {*} req Objeto con los parámetros que se han pasado en la llamada a esta URL 
-     * @param {*} res Objeto Response con las respuesta que se va a dar a la petición recibida
-     */
-    getTodos: async (req, res) => {
-        try {
-            let proyectos = await client_proyectos.query(
-                q.Map(
-                    q.Paginate(q.Documents(q.Collection("Proyectos"))),
-                    q.Lambda("X", q.Get(q.Var("X")))
-                )
-            )
-            // console.log( proyectos ) // Para comprobar qué se ha devuelto en proyectos
-            CORS(res)
-                .status(200)
-                .json(proyectos)
-        } catch (error) {
-            res.status(500).json({ error: error.description })
-        }
-    },
-    /**
-     * Método para obtener todos los proyectos de la BBDD y, además, las personas que hay en cada proyecto
-     * @param {*} req Objeto con los parámetros que se han pasado en la llamada a esta URL 
-     * @param {*} res Objeto Response con las respuesta que se va a dar a la petición recibida
-     */
-    getTodosConPersonas: async (req, res) => {
-        try {
-            let proyectos = await client_proyectos.query(
-                q.Map(
-                    q.Paginate(q.Documents(q.Collection("Proyectos"))),
-                    q.Lambda("X", q.Get(q.Var("X")))
-                )
-            )
-            let url=URL_MS_PERSONAS+"/getTodas"
-            let response_personas = await fetch(url)
-            let personas = await response_personas.json()
 
-            // Incluyo los datos de cada persona que hay en el proyecto
-            proyectos.data.forEach( pr=>{
-                // Creo un nuevo campo llamado datos_personas en cada proyecto
-                pr.data.datos_personas=personas.data.filter( pe => 
-                    pr.data.personas.join().includes( pe.ref["@ref"].id)
-                )
-            });
-            
-            CORS(res)
-                .status(200)
-                .json(proyectos)
-        } catch (error) {
-            res.status(500).json({ error: error.description+"\n ¡¡COMPRUEBE QUE EL MS PERSONAS FUNCIONA CORRECTAMENTE" })
-        }
-    },
 }
 
 
+
+// CALLBACKS ADICIONALES
 
 /**
  * Callbacks adicionales. Fundamentalmente para comprobar que el ms funciona.
@@ -364,11 +324,12 @@ const CB_OTHERS = {
      */
     home: async (req, res) => {
         try {
-            res.status(200).json({mensaje: "Microservicio Proyectos: home"});
+            CORS(res).status(200).json({ mensaje: "Microservicio MS Plantilla: home" });
         } catch (error) {
-            res.status(500).json({ error: error.description })
+            CORS(res).status(500).json({ error: error.description })
         }
     },
+
     /**
      * Devuelve un mensaje indicando que se ha accedido a la información Acerca De del microservicio
      * @param {*} req Objeto con los parámetros que se han pasado en la llamada a esta URL 
@@ -376,29 +337,27 @@ const CB_OTHERS = {
      */
     acercaDe: async (req, res) => {
         try {
-            res.status(200).json({
-                mensaje: "Microservicio Proyectos: acerca de",
-                autor: "Víctor Manuel Rivas Santos",
-                email: "vrivas@ujaen.es",
-                fecha: "febrero, 2023"
+            CORS(res).status(200).json({
+                mensaje: "Microservicio MS Plantilla: acerca de",
+                autor: "¿¿¿ AUTOR ???",
+                email: "¿¿¿ EMAIL ???",
+                fecha: "¿¿¿ FECHA ???"
             });
         } catch (error) {
-            res.status(500).json({ error: error.description })
+            CORS(res).status(500).json({ error: error.description })
         }
     },
 
 }
 
-// Une todos los callbacks en un solo objeto.
-// OJO: No debe haber callbacks con el mismo nombre en los distintos objetos, porque si no
-// el último que haya sobreescribe a todos los anteriores.
+// Une todos los callbacks en un solo objeto para poder exportarlos.
+// MUY IMPORTANTE: No debe haber callbacks con el mismo nombre en los distintos objetos, porque si no
+//                 el último que haya SOBREESCRIBE a todos los anteriores.
 exports.callbacks = { ...CB_MODEL_SELECTS, ...CB_OTHERS }
 
-
-//CB_MODEL_SELECTS.getTodosConPersonas() // Para depuración
 ```
 
-*Ejemplo de fichero ```callbacks.js``` del microservicio Proyectos*
+*Ejemplo de fichero ```callbacks.js``` del microservicio Plantilla*
 
 **Es muy importante** notar que todos los métodos definidos en *callbacks* devuelven única y exclusivamente JSON. Los datos así devueltos se envían a la aplicación *front-end* que es la que tiene que procesarlos para mostrarlos al cliente.
 
@@ -410,14 +369,17 @@ Como se puede observar tanto en los *callbacks* como en *routes*, la inmensa may
 // Dentro del fichero routes.js
 // =============================
 
-// Devuelve todos los proyectos que hay en la BBDD añadiendo las personas que participan
-router.get("/getTodosConPersonas", async (req, res) => {
+/**
+ * Ruta raíz: /
+ */
+router.get("/", async (req, res) => {
     try {
-        await callbacks.getTodosConPersonas(req, res)
+        await callbacks.home(req, res)
     } catch (error) {
         console.log(error);
     }
 });
+
 
 ----------------------------------------------
 
@@ -425,23 +387,23 @@ router.get("/getTodosConPersonas", async (req, res) => {
 // ===============================
 
 /**
-* Prueba de conexión a la BBDD: devuelve todas los proyectos que haya en la BBDD.
-* @param {*} req Objeto con los parámetros que se han pasado en la llamada a esta URL 
-* @param {*} res Objeto Response con las respuesta que se va a dar a la petición recibida
-*/
-test_db: async (req, res) => {
-    try {
-        let proyectos = await client_proyectos.query(
-            q.Map(
-                q.Paginate(q.Documents(q.Collection("Proyectos"))),
-                q.Lambda("X", q.Get(q.Var("X")))
-            )
-        )
-        res.status(200).json(proyectos)
-    } catch (error) {
-        res.status(500).json({ error: error.description })
-    }
-},
+     * Devuelve un mensaje indicando que se ha accedido a la información Acerca De del microservicio
+     * @param {*} req Objeto con los parámetros que se han pasado en la llamada a esta URL 
+     * @param {*} res Objeto Response con las respuesta que se va a dar a la petición recibida
+     */
+    acercaDe: async (req, res) => {
+        try {
+            CORS(res).status(200).json({
+                mensaje: "Microservicio MS Plantilla: acerca de",
+                autor: "¿¿¿ AUTOR ???",
+                email: "¿¿¿ EMAIL ???",
+                fecha: "¿¿¿ FECHA ???"
+            });
+        } catch (error) {
+            CORS(res).status(500).json({ error: error.description })
+        }
+    },
+
 ```
 
 Ambas palabras reservadas permiten trabajar mucho más cómodamente con "promesas" ([promise]()https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise). Una promesa se define como:
@@ -457,137 +419,9 @@ Para profundizar más en la programación con promesas pueden usarse los siguien
 * [JavaScript Asíncrono](https://developer.mozilla.org/es/docs/Learn/JavaScript/Asynchronous)
 * [async and await](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous/Promises#async_and_await)
 
-## La base de datos
-Para realizar la aplicación podríamos haber usado cualquier BBDD o incluso cualquier otro mecanismo para garantizar la persistencia (ficheros en el servidor, por ejemplo). De hecho, cada uno de los microservicios (*Personas* y *Proyectos*) podría haber usado un sistema distinto. Esto es así porque cada microservicio es independiente y gestiona la persistencia de datos como mejor le parece.
+## Aplicación de ejemplo de la que obtener código
+Finalmente, para la implementación de la funcionalidad requerida en la práctica, se puede hacer uso del código disponible en el siguiente repositorio: 
 
-No obstante, para este ejemplo y por facilidad, hemos usado una BBDD NoSQL alojada en la nube, concretamente [Fauna](https://fauna.com)
+Dicho código muestra una aplicación similar, pero con mucha más funcionalidad que esta plantilla: acceso a base de datos remota, listado de documentos recuperados de la BBDD, peticiones entre distintos microservicios, etc.
 
-![Página de inicio del gestor de BBDD Fauna](./assets/img/fauna.png)
-
-*Página de inicio del gestor de BBDD Fauna.&#8593;*
-
-Este gestor de BBDD permite ser usado gratuitamente y es muy intuitivo. Como cualquier en cualquier gestor NoSQL, cada base de datos contiene **colecciones** de **documentos**. Cada *documento* es un objeto en formato JSON y está identificado por un **id** único que le asigna el propio sistema al crearlo; de esta forma, es relativamente fácil acceder a cada uno de los documentos por su *id*.
-
-Las siguientes imágenes muestran: la BBDD creada (*Personas_Proyectos*), la colección *Personas* y un documento dentro de ella.
-
-![Conjunto de Bases de Datos de mi usuario en Fauna](./assets/img/databases.png)
-
-*Conjunto de Bases de Datos de mi usuario en Fauna.&#8593;*
-
-![Colecciones dentro de la BBDD Personas-Proyectos](./assets/img/colecciones.png)
-
-*Colecciones dentro de la BBDD Personas-Proyectos.&#8593;*
-
-![Documentos dentro de la colección Personas](./assets/img/coleccion-personas.png)
-
-*Documentos dentro de la colección Personas.&#8593;*
-
-
-![Detalle de uno de los documentos dentro de la colección personas](./assets/img/detalle-persona.png)
-
-*Detalle de uno de los documentos dentro de la colección personas.&#8593;*
-
-### Conectar a la BBBDD
-La conexión a Fauna es bastante fácil dado que existe un módulo para *node.js*. Lo único que necesitamos saber es el código secreto que nos muestra Fauna cuando creamos una BBDD.
-
-```
-/// Necesario para conectar a la BBDD
-const faunadb = require('faunadb'),
-    q = faunadb.query;
-
-const client_proyectos = new faunadb.Client({
-    secret: '**********',
-});
-```
-
-La definición de las constantes **cliente_proyectos** y **q** (o como deseemos llamarlas) son las que nos permiten realizar las consultas a la BBDD y obtener la respuesta. Dado que es una llamada a un servicio remoto, se realiza usando *await*, es decir, usando promesas.
-
-```
-let proyectos = await client_proyectos.query(
-                q.Map(
-                    q.Paginate(q.Documents(q.Collection("Proyectos"))),
-                    q.Lambda("X", q.Get(q.Var("X")))
-                )
-            )
-```
-
-Posiblemente los aspectos más complicados son los relacionados con el tratamiento del **id** de un documento y con la resolución de llamadas de un microservicio a otro. Los vemos a continuación.
-
-### Uso del identificador de un documento
-
-Al hacer una consulta a Fauna, el gestor de BBDD nos devuelve el conjunto de documentos que resuelven esa consulta. Cada documento es un objeto que, entre sus múltiples atributos, contiene uno de especial importancia denominado **ref**, el cual a su vez, incluye otro atributo denominado **@ref**. Pues bien, es este último atributo el que almacena el id del documento.
-
-Así, si hemos recuperado un proyecto de la base de datos, el identificador de dicho documento será: ```proyecto.ref["@ref"].id```. 
-
-Afortunadamente, es mucho más fácil hacer una consulta a la BBDD en la que obtengamos un documento a partir de su id. Concretamente, solo hay que hacer lo siguiente:
-
-```
-let persona = await client.query(
-            q.Get(q.Ref(q.Collection('Personas'), '354047338258366678'))
-)
-```
-
-### Llamadas de un microservicio a otro
-Dado que cada microservicio es responsable únicamente del acceso a *su* base de datos, si necesitamos "cruzar" datos entre ellos tendremos que realizar llamadas de un microservicio a otro.
-
-Un ejemplo lo encontramos en la aplicación cuando requerimos todos los proyectos y queremos, además, que se devuelvan los datos de cada una de las personas asociadas a ese proyecto.
-
-El código es el siguiente:
-
-```
-/**
-* Método para obtener todos los proyectos de la BBDD y, además, las personas que hay en cada proyecto
-* @param {*} req Objeto con los parámetros que se han pasado en la llamada a esta URL 
-* @param {*} res Objeto Response con las respuesta que se va a dar a la petición recibida
-*/
-getTodosConPersonas: async (req, res) => {
-    try {
-        let proyectos = await client_proyectos.query(
-            q.Map(
-                q.Paginate(q.Documents(q.Collection("Proyectos"))),
-                q.Lambda("X", q.Get(q.Var("X")))
-            )
-        )
-```
-        // LLAMADA AL OTRO MICROSERVICIO
-        let url=URL_MS_PERSONAS+"/getTodas"
-        let response_personas = await fetch(url)
-        let personas = await response_personas.json()
-```
-        // Incluyo los datos de cada persona que hay en el proyecto
-        proyectos.data.forEach( pr=>{
-            // Creo un nuevo campo llamado datos_personas en cada proyecto
-            pr.data.datos_personas=personas.data.filter( pe => 
-                pr.data.personas.join().includes( pe.ref["@ref"].id)
-            )
-        });
-
-        CORS(res)
-            .status(200)
-            .json(proyectos)
-    } catch (error) {
-        res.status(500).json({ error: error.description+"\n ¡¡COMPRUEBE QUE EL MS PERSONAS FUNCIONA CORRECTAMENTE" })
-    }
-},
-```
-En nuestro ejemplo, descargamos todos los proyectos y a continuación todas las personas:
-```
-    // LLAMADA AL OTRO MICROSERVICIO
-    let url=URL_MS_PERSONAS+"/getTodas"
-    let response_personas = await fetch(url)
-    let personas = await response_personas.json()
-```
-
-Y, posteriormente, vamos recorriendo cada proyecto para ver qué personas tiene asignadas:
-
-```
-    // Incluyo los datos de cada persona que hay en el proyecto
-    proyectos.data.forEach( pr=>{
-        // Creo un nuevo campo llamado datos_personas en cada proyecto
-        pr.data.datos_personas=personas.data.filter( pe => 
-            pr.data.personas.join().includes( pe.ref["@ref"].id)
-        )
-    });
-```
-
-No es necesariamente la forma más eficiente de hacerlo, pero funciona.
+Además, incluye documentación sobre dicho código y un vídeo descriptivo de cómo se ha realizado y cómo funciona la aplicación de ejemplo.
