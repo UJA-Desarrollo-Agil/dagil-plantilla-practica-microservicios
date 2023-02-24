@@ -1,4 +1,4 @@
-# Descripción de la aplicación Plantilla Práctica Microservicios    
+# *Plantilla Práctica Microservicios*: descripción de la aplicación
 
 Este código que se presenta aquí corresponde a la plantilla para realizar un desarrollo basado en microservicios para las prácticas de Desarrollo Ágil, para el curso 2022-2023.
 
